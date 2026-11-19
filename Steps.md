@@ -38,3 +38,9 @@ console.log(`Example app listening on port ${port}`)
 }
 
 # npm run dev
+
+# setup NEON_DB
+
+# npm i pg
+
+# npm i @types/pg
