@@ -144,6 +144,7 @@ app.put("/api/v1/users/:id", async (req: Request, res: Response) => {
                 name = COALESCE($1, name),
                 password = COALESCE($2, password),
                 age = COALESCE($3, age),
+                updated_at = NOW(),
                 is_active = COALESCE($4, is_active)
             WHERE id = $5
             RETURNING *`,
