@@ -41,6 +41,10 @@ app.get('/', (req: Request, res: Response) => {
     });
 })
 
+
+//-------------------//
+//  CREATE NEW USER  //
+//-------------------//
 app.post("/api/v1/users", async (req: Request, res: Response) => {
     try {
         const { name, email, password, age } = req.body;
@@ -54,6 +58,31 @@ app.post("/api/v1/users", async (req: Request, res: Response) => {
             success: true,
             message: "User Created Successfully",
             data: result.rows[0],
+        });
+    } catch (err: any) {
+        res.status(500).json({
+            success: false,
+            message: err?.message,
+            error: err,
+        });
+    }
+});
+
+
+//------------------//
+//  SHOW ALL USERS  //
+//------------------//
+app.get("/api/v1/users", async (req: Request, res: Response) => {
+    try {
+        // const { name, email, password, age } = req.body;
+        const result = await pool.query(`
+            SELECT * FROM users;    
+        `);
+
+        res.status(200).json({
+            success: true,
+            message: "All Users Displayed Successfully...",
+            data: result,
         });
     } catch (err: any) {
         res.status(500).json({
