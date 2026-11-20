@@ -74,7 +74,6 @@ app.post("/api/v1/users", async (req: Request, res: Response) => {
 //------------------//
 app.get("/api/v1/users", async (req: Request, res: Response) => {
     try {
-        // const { name, email, password, age } = req.body;
         const result = await pool.query(`
             SELECT * FROM users;    
         `);
@@ -83,6 +82,34 @@ app.get("/api/v1/users", async (req: Request, res: Response) => {
             success: true,
             message: "All Users Displayed Successfully...",
             data: result,
+        });
+    } catch (err: any) {
+        res.status(500).json({
+            success: false,
+            message: err?.message,
+            error: err,
+        });
+    }
+});
+
+
+//----------------------//
+//  SHOW A SINGLE USER  //
+//----------------------//
+app.get("/api/v1/users/:id", async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+
+        
+
+        const result = await pool.query(`
+            SELECT * FROM users WHERE id = ${id};    
+        `);
+
+        res.status(200).json({
+            success: true,
+            message: `ID: ${id} User Displayed Successfully...`,
+            data: result.rows[0],
         });
     } catch (err: any) {
         res.status(500).json({
