@@ -96,21 +96,65 @@ app.get("/api/v1/users", async (req: Request, res: Response) => {
 //----------------------//
 //  SHOW A SINGLE USER  //
 //----------------------//
+
 app.get("/api/v1/users/:id", async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+
+        const result = await pool.query(
+            "SELECT * FROM users WHERE id = $1",
+            [id]
+        );
+
+        if (result.rows.length === 0) {
+            res.status(404).json({
+                success: false,
+                message: `ID: ${id} User Not Found!!!`
+            });
+            return;
+        }
+
+        res.status(200).json({
+            success: true,
+            message: `ID: ${id} User Displayed Successfully...`,
+            data: result.rows[0]
+        });
+
+    } catch (err: unknown) {
+        res.status(500).json({
+            success: false,
+            message: err instanceof Error
+                ? err.message
+                : "Internal Server Error"
+        });
+    }
+});
+
+
+//----------------------//
+//  UPDATE SINGLE USER  //
+//----------------------//
+app.put("/api/v1/users/:id", async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
 
         //handle error
         const data = req.body;
+        const { name, password, age, is_active } = req.body;
         data.find(async (user: IUser) => {
             if (user.id === id) {
                 const result = await pool.query(`
-                    SELECT * FROM users WHERE id = ${id};    
-                `);
+                    UPDATE users SET
+                    name = COALESCE($1, name),
+                    password = COALESCE($2, password),
+                    age = COALESCE($3, age),
+                    is_active = COALESCE($4, is_active),
+                    WHERE id = $5 RETURNING * 
+                `, [name ?? null, password ?? null, age ?? null, is_active ?? null, id]);
 
                 res.status(200).json({
                     success: true,
-                    message: `ID: ${id} User Displayed Successfully...`,
+                    message: `ID: ${id} User Updated Successfully...`,
                     data: result.rows[0],
                 });
             }
