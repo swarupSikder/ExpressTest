@@ -100,17 +100,29 @@ app.get("/api/v1/users/:id", async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
 
-        
+        //handle error
+        const data = req.body;
+        data.find(async (user: IUser) => {
+            if (user.id === id) {
+                const result = await pool.query(`
+                    SELECT * FROM users WHERE id = ${id};    
+                `);
 
-        const result = await pool.query(`
-            SELECT * FROM users WHERE id = ${id};    
-        `);
-
-        res.status(200).json({
-            success: true,
-            message: `ID: ${id} User Displayed Successfully...`,
-            data: result.rows[0],
+                res.status(200).json({
+                    success: true,
+                    message: `ID: ${id} User Displayed Successfully...`,
+                    data: result.rows[0],
+                });
+            }
+            else {
+                res.status(404).json({
+                    success: false,
+                    message: `ID: ${id} User Not Found!!!`
+                });
+            }
         });
+
+
     } catch (err: any) {
         res.status(500).json({
             success: false,
