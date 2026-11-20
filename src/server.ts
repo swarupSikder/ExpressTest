@@ -182,6 +182,44 @@ app.put("/api/v1/users/:id", async (req: Request, res: Response) => {
 });
 
 
+//------------------------//
+//  DELETE A SINGLE USER  //
+//------------------------//
+
+app.delete("/api/v1/users/:id", async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+
+        const result = await pool.query(
+            `DELETE FROM users WHERE id = $1 RETURNING *`,
+            [id]
+        );
+
+        if (result.rows.length === 0) {
+            res.status(404).json({
+                success: false,
+                message: `ID: ${id} User Not Found!!!`
+            });
+            return;
+        }
+
+        res.status(200).json({
+            success: true,
+            message: `ID: ${id} User Deleted Successfully...`,
+            data: result.rows[0]
+        });
+
+    } catch (err: unknown) {
+        res.status(500).json({
+            success: false,
+            message: err instanceof Error
+                ? err.message
+                : "Internal Server Error"
+        });
+    }
+});
+
+
 app.listen(port, () => {
     console.log(`Server is running at ${port} Post...`)
 })
