@@ -41,13 +41,18 @@ app.get('/', (req: Request, res: Response) => {
     });
 })
 
-app.post("/", async (req: Request, res: Response) => {
-    const { name, age, password } = req.body;
+app.post("/api/v1/users", async (req: Request, res: Response) => {
+    const { name, email, password, age } = req.body;
+    const result = await pool.query(`
+        INSERT INTO users (name, email, password, age)
+                    values ($1, $2, $3, $4) RETURNING *;
+        `, [name, email, password, age]
+    );
 
     res.status(201).json({
         success: true,
         message: "User Created Successfully",
-        data: { name, age },
+        data: result.rows[0],
     });
 });
 
