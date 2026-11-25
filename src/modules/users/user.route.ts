@@ -3,10 +3,14 @@ import { userController } from "./user.controller";
 
 const router = Router();
 
-//-------------------//
-//  CREATE NEW USER  //
-//-------------------//
+//------------------//
+//  USER SUB-ROUTE  //
+//------------------//
 //-/api/v1/users
 router.post("/", userController.createUser);
+router.get("/", userController.showAllUser);
+router.get("/:id", userController.showSingleUser);
+router.put("/:id", userController.updateSingleUser);
+router.delete("/:id", userController.deleteSingleUser);
 
 export const userRoute = router;
