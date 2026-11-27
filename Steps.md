@@ -44,3 +44,5 @@ console.log(`Example app listening on port ${port}`)
 # npm i pg
 
 # npm i @types/pg
+
+# npm i bcryptjs
