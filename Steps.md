@@ -46,3 +46,7 @@ console.log(`Example app listening on port ${port}`)
 # npm i @types/pg
 
 # npm i bcryptjs
+
+# npm i jsonwebtoken
+
+# npm i @types/jsonwebtoken
