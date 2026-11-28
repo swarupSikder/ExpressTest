@@ -19,3 +19,4 @@ Method : GET | URL : /api/v1/auth/login | Time : 1795873605657
 Method : GET | URL : /api/v1/auth/login | Time : 1795873606417
 Method : GET | URL : /api/v1/auth/login | Time : 1795873606967
 Method : GET | URL : /api/v1/users | Time : 1795873614463
+Method : GET | URL : /api/v1/users | Time : 1795874351866

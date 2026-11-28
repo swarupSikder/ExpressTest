@@ -2,6 +2,7 @@ import { JwtPayload } from './../../../node_modules/@types/jsonwebtoken/index.d'
 import bcrypt from "bcryptjs";
 import { pool } from "../../../db";
 import jwt from "jsonwebtoken";
+import config from '../../../config';
 
 const loginUserIntoDB = async (payLoad: { email: string; password: string }) => {
     const { email, password } = payLoad;
@@ -32,7 +33,7 @@ const loginUserIntoDB = async (payLoad: { email: string; password: string }) => 
     }
     const accessToken = jwt.sign(
         JwtPayload,
-        "sdjfsdfgjsdfj8798789sfd",
+        config.jwt_secret,
         { expiresIn: "1d" }
     );
     return {accessToken, user: user.rows[0]};
