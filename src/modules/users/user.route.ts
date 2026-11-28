@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { userController } from "./user.controller";
+import auth from "../../middleware/auth";
 
 const router = Router();
 
@@ -8,7 +9,7 @@ const router = Router();
 //------------------//
 //-/api/v1/users
 router.post("/", userController.createUser);
-router.get("/", userController.showAllUser);
+router.get("/", auth, userController.showAllUser);
 router.get("/:id", userController.showSingleUser);
 router.put("/:id", userController.updateSingleUser);
 router.delete("/:id", userController.deleteSingleUser);
